@@ -1,7 +1,7 @@
 {
   "name": "gendiff-mazurineg",
-  "version": "0.0.4",
-  "description": "monitor config files changes",
+  "version": "0.0.6",
+  "description": "Compares two configuration files and shows a difference.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
