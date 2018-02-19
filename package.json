@@ -1,7 +1,7 @@
 {
   "name": "gendiff-mazurineg",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.4",
+  "description": "monitor config files changes",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,6 +13,9 @@
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "cli",
     "config",
