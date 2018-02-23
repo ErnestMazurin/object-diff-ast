@@ -1,34 +1,23 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
 import ini from 'ini';
-
+import _ from 'lodash';
 
 const parseDispatcher = {
-  json: str => JSON.parse(str),
-  yaml: str => yaml.safeLoad(str),
-  ini: str => ini.parse(str),
+  json: JSON.parse,
+  yaml: yaml.safeLoad,
+  ini: ini.parse,
 };
-
 
 const render = (differenceList) => {
   const core = differenceList.map(item => `  ${item.sign} ${item.key}: ${item.value}\n`).join('');
   return `{\n${core}}\n`;
 };
 
-
-export default (path1, path2, format = 'json') => {
-  // ----------- read files -----------------------------
-  const file1 = fs.readFileSync(path1).toString();
-  const file2 = fs.readFileSync(path2).toString();
-
-  // ----------- parse files ----------------------------
-  const config1 = parseDispatcher[format](file1);
-  const config2 = parseDispatcher[format](file2);
-
-  // ----------- get differences ------------------------
-  const keys1 = new Set(Object.keys(config1));
-  const keys2 = new Set(Object.keys(config2));
-  const uniqKeys = Object.keys({ ...config1, ...config2 });
+const diff = (config1, config2) => {
+  const keys1 = new Set(_.keys(config1));
+  const keys2 = new Set(_.keys(config2));
+  const uniqKeys = _.union(_.keys(config1), _.keys(config2));
 
   const callback = (acc, key) => {
     if (config1[key] === config2[key]) {
@@ -43,8 +32,17 @@ export default (path1, path2, format = 'json') => {
     return [...acc, { sign: '+', key, value: config2[key] }];
   };
 
-  const differenceList = uniqKeys.reduce(callback, []);
+  return uniqKeys.reduce(callback, []);
+};
 
-  // ------------ render result --------------------------
+export default (path1, path2, format = 'json') => {
+  const file1 = fs.readFileSync(path1).toString();
+  const file2 = fs.readFileSync(path2).toString();
+
+  const config1 = parseDispatcher[format](file1);
+  const config2 = parseDispatcher[format](file2);
+
+  const differenceList = diff(config1, config2);
+
   return render(differenceList);
 };
