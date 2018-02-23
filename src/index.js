@@ -1,10 +1,12 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
+import ini from 'ini';
 
 
 const parseDispatcher = {
   json: str => JSON.parse(str),
   yaml: str => yaml.safeLoad(str),
+  ini: str => ini.parse(str),
 };
 
 
@@ -15,12 +17,15 @@ const render = (differenceList) => {
 
 
 export default (path1, path2, format = 'json') => {
+  // ----------- read files -----------------------------
   const file1 = fs.readFileSync(path1).toString();
   const file2 = fs.readFileSync(path2).toString();
 
+  // ----------- parse files ----------------------------
   const config1 = parseDispatcher[format](file1);
   const config2 = parseDispatcher[format](file2);
 
+  // ----------- get differences ------------------------
   const keys1 = new Set(Object.keys(config1));
   const keys2 = new Set(Object.keys(config2));
   const uniqKeys = Object.keys({ ...config1, ...config2 });
@@ -39,5 +44,7 @@ export default (path1, path2, format = 'json') => {
   };
 
   const differenceList = uniqKeys.reduce(callback, []);
+
+  // ------------ render result --------------------------
   return render(differenceList);
 };

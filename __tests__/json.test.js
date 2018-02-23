@@ -11,3 +11,7 @@ test('1. flat json', () => {
 test('2. flat yaml', () => {
   expect(genDiff('__tests__/__fixtures__/before.yaml', '__tests__/__fixtures__/after.yaml', 'yaml')).toBe(expectedResult);
 });
+
+test('3. flat ini', () => {
+  expect(genDiff('__tests__/__fixtures__/before.ini', '__tests__/__fixtures__/after.ini', 'ini')).toBe(expectedResult);
+});
