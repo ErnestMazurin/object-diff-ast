@@ -1,8 +1,10 @@
 import fs from 'fs';
+import yaml from 'js-yaml';
 
 const parse = (text, format) => {
   const parseDisp = {
     json: str => JSON.parse(str),
+    yaml: str => yaml.safeLoad(str),
   };
   return parseDisp[format](text);
 };

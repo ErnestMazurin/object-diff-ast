@@ -1,6 +1,6 @@
 {
   "name": "gendiff-mazurineg",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Compares two configuration files and shows a difference.",
   "main": "index.js",
   "scripts": {
@@ -44,6 +44,7 @@
     "jest": "^22.3.0"
   },
   "dependencies": {
-    "commander": "^2.14.1"
+    "commander": "^2.14.1",
+    "js-yaml": "^3.10.0"
   }
 }
