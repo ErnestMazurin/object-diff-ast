@@ -1,14 +1,20 @@
 {
   "name": "gendiff-mazurineg",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Compares two configuration files and shows a difference.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "babel-node": "babel-node",
     "eslint": "eslint",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
     "prepublishOnly": "npm run build"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/.git"
+    ]
   },
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
@@ -29,12 +35,13 @@
   "devDependencies": {
     "babel-cli": "*",
     "babel-core": "*",
+    "babel-eslint": "*",
     "babel-preset-env": "*",
     "babel-preset-stage-0": "*",
-    "babel-eslint": "*",
     "eslint": "*",
     "eslint-config-airbnb-base": "*",
-    "eslint-plugin-import": "*"
+    "eslint-plugin-import": "*",
+    "jest": "^22.3.0"
   },
   "dependencies": {
     "commander": "^2.14.1"
