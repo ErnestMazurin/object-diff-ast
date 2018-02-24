@@ -2,6 +2,7 @@ import fs from 'fs';
 import yaml from 'js-yaml';
 import ini from 'ini';
 import _ from 'lodash';
+import render from './render';
 
 const parseDispatcher = {
   json: JSON.parse,
@@ -9,28 +10,41 @@ const parseDispatcher = {
   ini: ini.parse,
 };
 
-const render = (differenceList) => {
-  const core = differenceList.map(item => `  ${item.sign} ${item.key}: ${item.value}\n`).join('');
-  return `{\n${core}}\n`;
-};
+const getAST = (config1, config2) => {
+  const iter = (node1, node2, level) => {
+    const uniqKeys = _.union(_.keys(node1), _.keys(node2));
 
-const getDiff = (config1, config2) => {
-  const uniqKeys = _.union(_.keys(config1), _.keys(config2));
+    const callback = (key) => {
+      if (_.has(node1, key) && !_.has(node2, key)) {
+        return {
+          key, value1: node1[key], status: 'removed', level, children: [],
+        };
+      }
+      if (!_.has(node1, key) && _.has(node2, key)) {
+        return {
+          key, value2: node2[key], status: 'added', level, children: [],
+        };
+      }
+      if (_.isObject(node1[key]) && _.isObject(node2[key])) {
+        const children = iter(node1[key], node2[key], level + 1);
+        return {
+          key, status: 'unit', level, children,
+        };
+      }
+      if (node1[key] === node2[key]) {
+        return {
+          key, value1: node1[key], status: 'unchanged', level, children: [],
+        };
+      }
+      return {
+        key, value1: node1[key], value2: node2[key], status: 'changed', level, children: [],
+      };
+    };
 
-  const callback = (acc, key) => {
-    if (config1[key] === config2[key]) {
-      return [...acc, { sign: ' ', key, value: config1[key] }];
-    }
-    if (_.has(config1, key) && _.has(config2, key)) {
-      return [...acc, { sign: '+', key, value: config2[key] }, { sign: '-', key, value: config1[key] }];
-    }
-    if (_.has(config1, key) && !_.has(config2, key)) {
-      return [...acc, { sign: '-', key, value: config1[key] }];
-    }
-    return [...acc, { sign: '+', key, value: config2[key] }];
+    return uniqKeys.map(callback);
   };
 
-  return uniqKeys.reduce(callback, []);
+  return iter(config1, config2, 1);
 };
 
 export default (path1, path2, format = 'json') => {
@@ -40,7 +54,7 @@ export default (path1, path2, format = 'json') => {
   const config1 = parseDispatcher[format](fileContent1);
   const config2 = parseDispatcher[format](fileContent2);
 
-  const differenceList = getDiff(config1, config2);
+  const diffAST = getAST(config1, config2);
 
-  return render(differenceList);
+  return render(diffAST);
 };
