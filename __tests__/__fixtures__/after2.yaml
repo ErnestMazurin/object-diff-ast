@@ -16,4 +16,4 @@ group1:
   nest: str
 
 group3:
-  fee: 100500
+  fee: "100500"

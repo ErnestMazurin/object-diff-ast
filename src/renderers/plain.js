@@ -7,23 +7,19 @@ export default (ast) => {
     const { key, type } = node;
     const { newValue, oldValue, children } = node;
 
-    if (type === 'added') {
-      return `Property '${parentKey}${key}' was added with ${_.isObject(newValue) ? '' : 'value '}${toString(newValue)}\n`;
+    switch (type) {
+      case 'added':
+        return `Property '${parentKey}${key}' was added with ${_.isObject(newValue) ? '' : 'value '}${toString(newValue)}`;
+      case 'removed':
+        return `Property '${parentKey}${key}' was removed`;
+      case 'changed':
+        return `Property '${parentKey}${key}' was updated. From ${toString(oldValue)} to ${toString(newValue)}`;
+      case 'unchanged':
+        return '';
+      default:
+        return children.map(item => makeText(item, `${parentKey}${key}.`)).filter(x => x !== '').join('\n');
     }
-
-    if (type === 'removed') {
-      return `Property '${parentKey}${key}' was removed\n`;
-    }
-
-    if (type === 'changed') {
-      return `Property '${parentKey}${key}' was updated. From ${toString(oldValue)} to ${toString(newValue)}\n`;
-    }
-
-    if (type === 'unchanged') {
-      return '';
-    }
-
-    return children.map(item => makeText(item, `${parentKey}${key}.`)).join('');
   };
-  return ast.map(node => makeText(node, '')).join('');
+
+  return `${ast.map(node => makeText(node, '')).filter(x => x !== '').join('\n')}\n`;
 };
