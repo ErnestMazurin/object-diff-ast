@@ -1,14 +1,8 @@
 import fs from 'fs';
-import yaml from 'js-yaml';
-import ini from 'ini';
+import path from 'path';
 import _ from 'lodash';
-import render from './render';
-
-const parseDispatcher = {
-  json: JSON.parse,
-  yaml: yaml.safeLoad,
-  ini: ini.parse,
-};
+import render from './renderers';
+import parse from './parsers';
 
 const getAST = (config1, config2) => {
   const iter = (node1, node2, level) => {
@@ -47,14 +41,17 @@ const getAST = (config1, config2) => {
   return iter(config1, config2, 1);
 };
 
-export default (path1, path2, format = 'json') => {
+export default (path1, path2, format = 'complex') => {
   const fileContent1 = fs.readFileSync(path1).toString();
   const fileContent2 = fs.readFileSync(path2).toString();
 
-  const config1 = parseDispatcher[format](fileContent1);
-  const config2 = parseDispatcher[format](fileContent2);
+  const extension1 = path.extname(path1).slice(1);
+  const extension2 = path.extname(path2).slice(1);
+
+  const config1 = parse(fileContent1, extension1);
+  const config2 = parse(fileContent2, extension2);
 
   const diffAST = getAST(config1, config2);
 
-  return render(diffAST);
+  return render(diffAST, format);
 };
