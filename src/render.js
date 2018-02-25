@@ -24,28 +24,28 @@ export default (ast) => {
   };
 
   const makeText = (node) => {
-    const { key, status, level } = node;
-    const { value1, value2, children } = node;
+    const { key, type, level } = node;
+    const { oldValue, newValue, children } = node;
 
     const gap = basicGap.repeat((level * 2) - 1);
 
-    if (status === 'added') {
-      return `${toString(key, value2, gap, '+')}`;
+    if (type === 'added') {
+      return `${toString(key, newValue, gap, '+')}`;
     }
 
-    if (status === 'removed') {
-      return `${toString(key, value1, gap, '-')}`;
+    if (type === 'removed') {
+      return `${toString(key, oldValue, gap, '-')}`;
     }
 
-    if (status === 'changed') {
-      const str1 = toString(key, value1, gap, '-');
-      const str2 = toString(key, value2, gap, '+');
-      return (_.isObject(value1) || _.isObject(value2)) ?
+    if (type === 'changed') {
+      const str1 = toString(key, oldValue, gap, '-');
+      const str2 = toString(key, newValue, gap, '+');
+      return (_.isObject(oldValue) || _.isObject(newValue)) ?
         [str1, str2] : [str2, str1];
     }
 
-    if (status === 'unchanged') {
-      return `${toString(key, value1, gap, ' ')}`;
+    if (type === 'unchanged') {
+      return `${toString(key, oldValue, gap, ' ')}`;
     }
 
     const head = `${gap}${basicGap}${key}: {\n`;

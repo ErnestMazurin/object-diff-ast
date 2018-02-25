@@ -17,27 +17,27 @@ const getAST = (config1, config2) => {
     const callback = (key) => {
       if (_.has(node1, key) && !_.has(node2, key)) {
         return {
-          key, value1: node1[key], status: 'removed', level, children: [],
+          key, oldValue: node1[key], type: 'removed', level, children: [],
         };
       }
       if (!_.has(node1, key) && _.has(node2, key)) {
         return {
-          key, value2: node2[key], status: 'added', level, children: [],
+          key, newValue: node2[key], type: 'added', level, children: [],
         };
       }
       if (_.isObject(node1[key]) && _.isObject(node2[key])) {
         const children = iter(node1[key], node2[key], level + 1);
         return {
-          key, status: 'unit', level, children,
+          key, type: 'unit', level, children,
         };
       }
       if (node1[key] === node2[key]) {
         return {
-          key, value1: node1[key], status: 'unchanged', level, children: [],
+          key, oldValue: node1[key], type: 'unchanged', level, children: [],
         };
       }
       return {
-        key, value1: node1[key], value2: node2[key], status: 'changed', level, children: [],
+        key, oldValue: node1[key], newValue: node2[key], type: 'changed', level, children: [],
       };
     };
 
