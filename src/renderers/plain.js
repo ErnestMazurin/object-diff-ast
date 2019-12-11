@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 export default (ast) => {
-  const toString = value => (_.isObject(value) ? 'complex value' : `'${value}'`);
+  const toString = (value) => (_.isObject(value) ? 'complex value' : `'${value}'`);
 
   const makeText = (node, parentKey) => {
     const { key, type } = node;
@@ -17,9 +17,9 @@ export default (ast) => {
       case 'unchanged':
         return '';
       default:
-        return children.map(item => makeText(item, `${parentKey}${key}.`)).filter(x => x !== '').join('\n');
+        return children.map((item) => makeText(item, `${parentKey}${key}.`)).filter((x) => x !== '').join('\n');
     }
   };
 
-  return `${ast.map(node => makeText(node, '')).filter(x => x !== '').join('\n')}\n`;
+  return `${ast.map((node) => makeText(node, '')).filter((x) => x !== '').join('\n')}\n`;
 };

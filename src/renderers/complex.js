@@ -40,8 +40,7 @@ export default (ast) => {
     if (type === 'changed') {
       const str1 = toString(key, oldValue, gap, '-');
       const str2 = toString(key, newValue, gap, '+');
-      return (_.isObject(oldValue) || _.isObject(newValue)) ?
-        [str1, str2] : [str2, str1];
+      return (_.isObject(oldValue) || _.isObject(newValue)) ? [str1, str2] : [str2, str1];
     }
 
     if (type === 'unchanged') {
