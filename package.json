@@ -4,7 +4,7 @@
   "description": "Compares two configuration files and shows a difference.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --collectCoverage",
     "babel-node": "babel-node",
     "eslint": "eslint",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
