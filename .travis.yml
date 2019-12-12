@@ -1,18 +1,30 @@
 ---
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=7dcfc749825c4573e9bd0415d757acd179095ece0ec154ab62d98d0768dd738c
+
 language: node_js
 
 node_js:
   - stable
 
-addons:
-  code_climate:
-    repo_token:
-      secure: "KAC7V0i26IXAJ9+V+yiD/Aej4/4F9Su/UwIgcioxy3S98sYE5MGVYNLJ2nWxqhnQvGQYpBHohmHXAUBMNn+SfFppJE7lntvgguJ93GR6rhSueM1YksFYPfg2Vv9iJlJYk4THhCqUiOhGLqLsMGLaRgglN32wTvYWYgZ05YQ8wR/ySnqsrSBQFoF8USllygvZmxYXKIrXKsrk216Xfp9hjdLjD7wDMVHLbNeo21zRRNfFIdrdXggw8JQVT2hBYckWlztwBj7OUdl+y6h/ppbFdiepN2W2Wj3JwE8UBXh8UQQR9sb3CGBajIipQrSTs2zXXyvjHk7TVrHRAhZ3qzFyN3U7cTXUrGaAISXl3o+hcUWXkLlNURhOCbVxprRUzq5q4yhOZN+q4L9UzgRLB2GUjNhgbcf8SFSuIhpdvpt2WxvFVcIg8C+mZ/9hUPbycKp4U0LsCAeXdb4N+SvakNMNw7bUOSTDB8PJif7jCnVkMfnDhLMIptoG8oxt5WVOtncXRPqKAYdpoaw1D5Pb8c/8z0yyBGAXWGnIBeDrrbAtc/S/uBCWBTnbw17Z4xC4Dp5nst43HgWIWc9CsqWq+nU1peW1aWoH7UfD6TLwMEZNa+aod9zM2ZISuKCnMDljpsYjVA3Xnb5aPjP74sEaJ7OWipntp6fIpDA751iB4i3tZkI="
+cache:
+  directories:
+    - node_modules
+
+install:
+  - make install
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
   - make lint
+  - make build
   - make test
 
 after_script:
-  - codeclimate-test-reporter < ./coverage/lcov.info
+  - ./cc-test-reporter after-build -t lcov --debug --exit-code $TRAVIS_TEST_RESULT
