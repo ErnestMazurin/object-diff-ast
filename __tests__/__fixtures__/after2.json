@@ -11,6 +11,11 @@
     "setting6": {
       "key": "value",
       "ops": "vops"
+    },
+    "setting7": {
+      "key": {
+        "innerKey": "innerValue"
+      }
     }
   },
 
