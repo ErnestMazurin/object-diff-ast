@@ -8,4 +8,10 @@ const rendersDispatcher = {
   json: jsonRender,
 };
 
-export default (ast, format) => rendersDispatcher[format](ast);
+export default (ast, format) => {
+  const renderer = rendersDispatcher[format];
+  if (renderer === undefined) {
+    return rendersDispatcher.complex(ast);
+  }
+  return renderer(ast);
+};
