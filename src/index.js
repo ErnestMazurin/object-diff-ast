@@ -32,7 +32,9 @@ const iter = (node1, node2, level) => _.union(_.keys(node1), _.keys(node2)).map(
 
 const getAST = (config1, config2) => iter(config1, config2, 1);
 
-export default (path1, path2, format = 'complex') => {
+export const getDiff = (obj1, obj2, format) => render(getAST(obj1, obj2), format);
+
+export const getConfigDiff = (path1, path2, format = 'complex') => {
   const fileContent1 = fs.readFileSync(path1).toString();
   const fileContent2 = fs.readFileSync(path2).toString();
 
@@ -42,7 +44,5 @@ export default (path1, path2, format = 'complex') => {
   const config1 = parse(fileContent1, extension1);
   const config2 = parse(fileContent2, extension2);
 
-  const diffAST = getAST(config1, config2);
-
-  return render(diffAST, format);
+  return getDiff(config1, config2, format);
 };

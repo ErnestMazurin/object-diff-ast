@@ -1,6 +1,5 @@
 import fs from 'fs';
-import genDiff from '../src';
-import 'regenerator-runtime/runtime';
+import { getConfigDiff } from '../src';
 
 const getPath = (name) => `__tests__/__fixtures__/${name}`;
 
@@ -36,6 +35,6 @@ const testSet = [
 describe('genDiff', () => {
   test.each(testSet)('genDiff(%s, %s, %s)', (name1, name2, format, expectedName) => {
     const expected = read(expectedName);
-    expect(genDiff(getPath(name1), getPath(name2), format)).toBe(expected);
+    expect(getConfigDiff(getPath(name1), getPath(name2), format)).toBe(expected);
   });
 });

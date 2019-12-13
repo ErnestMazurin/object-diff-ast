@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import program from 'commander';
-import genDiff from '..';
+import { getConfigDiff } from '..';
 
 program
   .version('0.7.0')
@@ -8,9 +8,8 @@ program
   .arguments('<firstConfig> <secondConfig>')
   .option('-f, --format [type]', 'Output format')
   .action((firstConfig, secondConfig) => {
-    const result = genDiff(firstConfig, secondConfig, program.format);
-    console.log(result);
+    console.log(
+      getConfigDiff(firstConfig, secondConfig, program.format),
+    );
   })
   .parse(process.argv);
-
-export default genDiff;
