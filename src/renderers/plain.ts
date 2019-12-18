@@ -5,27 +5,24 @@ import { JSONValue } from '../JSONObject';
 const toString = (value: JSONValue) => (isObject(value) ? 'complex value' : `'${value}'`);
 
 const makeText = (node: Node, parentKey: string): string => {
-  const { key } = node;
   if (node.type === 'added') {
-    const { newValue } = node;
-    return `Property '${parentKey}${key}' was added with ${isObject(newValue) ? '' : 'value '}${toString(newValue)}`;
+    const title = isObject(node.newValue) ? '' : 'value ';
+    const newValue = toString(node.newValue);
+    return `Property '${parentKey}${node.key}' was added with ${title}${toString(newValue)}`;
   }
-
   if (node.type === 'removed') {
-    return `Property '${parentKey}${key}' was removed`;
+    return `Property '${parentKey}${node.key}' was removed`;
   }
-
   if (node.type === 'changed') {
-    const { oldValue, newValue } = node;
-    return `Property '${parentKey}${key}' was updated. From ${toString(oldValue)} to ${toString(newValue)}`;
+    const oldValue = toString(node.oldValue);
+    const newValue = toString(node.newValue);
+    return `Property '${parentKey}${node.key}' was updated. From ${oldValue} to ${newValue}`;
   }
-
   if (node.type === 'unchanged') {
     return '';
   }
-
   return node.children
-    .map(item => makeText(item, `${parentKey}${key}.`))
+    .map(item => makeText(item, `${parentKey}${node.key}.`))
     .filter(x => x !== '')
     .join('\n');
 };

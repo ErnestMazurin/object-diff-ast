@@ -1,4 +1,4 @@
-import { isObject, keys, flatten } from 'lodash';
+import { isObject, keys } from 'lodash';
 import { Node } from '../Node';
 import { JSONValue } from '../JSONObject';
 
@@ -26,35 +26,31 @@ const toString = (key: string, value: JSONValue, gap: string, prefix: string): s
 };
 
 const makeText = (node: Node): string => {
-  const { key, level } = node;
-  const gap = basicGap.repeat(level * 2 - 1);
+  const gap = basicGap.repeat(node.level * 2 - 1);
 
   if (node.type === 'added') {
-    return `${toString(key, node.newValue, gap, '+')}`;
+    return `${toString(node.key, node.newValue, gap, '+')}`;
   }
 
   if (node.type === 'removed') {
-    return `${toString(key, node.oldValue, gap, '-')}`;
+    return `${toString(node.key, node.oldValue, gap, '-')}`;
   }
 
   if (node.type === 'changed') {
     const { oldValue, newValue } = node;
-    const str1 = toString(key, oldValue, gap, '-');
-    const str2 = toString(key, newValue, gap, '+');
-    if (isObject(oldValue) || isObject(newValue)) {
-      return `${str1}${str2}`;
-    }
-    return `${str2}${str1}`;
+    const str1 = toString(node.key, oldValue, gap, '-');
+    const str2 = toString(node.key, newValue, gap, '+');
+    return isObject(oldValue) || isObject(newValue) ? `${str1}${str2}` : `${str2}${str1}`;
   }
 
   if (node.type === 'unchanged') {
-    return `${toString(key, node.oldValue, gap, ' ')}`;
+    return `${toString(node.key, node.oldValue, gap, ' ')}`;
   }
 
-  const head = `${gap}${basicGap}${key}: {\n`;
+  const head = `${gap}${basicGap}${node.key}: {\n`;
   const body = node.children.map(makeText).join('');
   const tail = `${gap}${basicGap}}\n`;
   return `${head}${body}${tail}`;
 };
 
-export const complexRender = (ast: Node[]) => `{\n${flatten(ast.map(makeText)).join('')}}\n`;
+export const complexRender = (ast: Node[]) => `{\n${ast.map(makeText).join('')}}\n`;
