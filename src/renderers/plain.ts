@@ -8,7 +8,7 @@ const makeText = (node: Node, parentKey: string): string => {
   if (node.type === 'added') {
     const title = isObject(node.newValue) ? '' : 'value ';
     const newValue = toString(node.newValue);
-    return `Property '${parentKey}${node.key}' was added with ${title}${toString(newValue)}`;
+    return `Property '${parentKey}${node.key}' was added with ${title}${newValue}`;
   }
   if (node.type === 'removed') {
     return `Property '${parentKey}${node.key}' was removed`;
