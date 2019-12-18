@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { getConfigDiff } from '../src';
 
-const getPath = (name) => `__tests__/__fixtures__/${name}`;
+const getPath = (name?: string) => `__tests__/__fixtures__/${name}`;
 
-const read = (path) => fs.readFileSync(getPath(path)).toString();
+const read = (path?: string) => fs.readFileSync(getPath(path)).toString();
 
 const testSet = [
   // Complex output with flat config files
