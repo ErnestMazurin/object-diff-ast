@@ -32,13 +32,11 @@ const makeText = (node: Node): string => {
   const gap = basicGap.repeat(level * 2 - 1);
 
   if (node.type === 'added') {
-    const { newValue } = node;
-    return `${toString(key, newValue, gap, '+')}`;
+    return `${toString(key, node.newValue, gap, '+')}`;
   }
 
   if (node.type === 'removed') {
-    const { oldValue } = node;
-    return `${toString(key, oldValue, gap, '-')}`;
+    return `${toString(key, node.oldValue, gap, '-')}`;
   }
 
   if (node.type === 'changed') {
@@ -52,14 +50,11 @@ const makeText = (node: Node): string => {
   }
 
   if (node.type === 'unchanged') {
-    const { oldValue } = node;
-    return `${toString(key, oldValue, gap, ' ')}`;
+    return `${toString(key, node.oldValue, gap, ' ')}`;
   }
 
-  const { children } = node;
-
   const head = `${gap}${basicGap}${key}: {\n`;
-  const body = children.map(makeText).join('');
+  const body = node.children.map(makeText).join('');
   const tail = `${gap}${basicGap}}\n`;
   return `${head}${body}${tail}`;
 };
