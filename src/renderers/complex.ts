@@ -27,8 +27,6 @@ const toString = (key: string, value: JSONValue, gap: string, prefix: string): s
 
 const makeText = (node: Node): string => {
   const { key, level } = node;
-  // const { oldValue, newValue, children } = node;
-
   const gap = basicGap.repeat(level * 2 - 1);
 
   if (node.type === 'added') {
