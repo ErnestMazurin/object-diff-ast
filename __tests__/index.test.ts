@@ -19,7 +19,7 @@ test('cli integration test', () => {
   const script = 'src/bin/getdiff.ts';
   const before = '__tests__/__fixtures__/before.json';
   const after = '__tests__/__fixtures__/after.json';
-  return cli(`npm run ts-node -- ${script} ${before} ${after}`, '.').then(({ stdout }) => {
+  return cli(`npm run ts-node -- ${script} ${before} ${after} -f plain`, '.').then(({ stdout }) => {
     expect(stdout.length).toBeGreaterThan(0);
   });
 });
