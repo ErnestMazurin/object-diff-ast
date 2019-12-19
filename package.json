@@ -1,8 +1,8 @@
 {
   "name": "gendiff-mazurineg",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Compares two configuration files and shows a difference.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "ts-node": "ts-node",

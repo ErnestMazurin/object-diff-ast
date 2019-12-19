@@ -6,6 +6,7 @@
     "allowJs": false,
     "outDir": "./dist",
     "removeComments": true,
+    "declaration": true,
 
     /* Strict Type-Checking Options */
     "strict": true,
