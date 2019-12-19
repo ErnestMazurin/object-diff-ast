@@ -1,6 +1,6 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
-import { JSONObject } from './JSONObject';
+import { JSONObject } from './types';
 
 const PARSERS_DISPATCHERS = {
   json: (str: string) => JSON.parse(str),

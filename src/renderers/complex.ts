@@ -1,6 +1,5 @@
-import { isObject, keys } from 'lodash';
-import { Node } from '../Node';
-import { JSONValue } from '../JSONObject';
+import { isObject, keys } from '../utils';
+import { Node, JSONValue } from '../types';
 
 const basicGap = '  ';
 
