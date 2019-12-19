@@ -1,13 +1,13 @@
 {
-  "name": "gendiff-mazurineg",
+  "name": "object-diff-ast",
   "version": "0.9.0",
-  "description": "Compares two objects and calculates the difference",
+  "description": "Compares two objects and calculate difference",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ErnestMazurin/config-diff"
+    "url": "https://github.com/ErnestMazurin/object-diff-ast"
   },
   "scripts": {
     "test": "jest",
@@ -22,7 +22,7 @@
     "collectCoverage": true
   },
   "bin": {
-    "gendiff": "dist/bin/gendiff.js"
+    "getdiff": "dist/bin/getdiff.js"
   },
   "files": [
     "dist"
@@ -42,11 +42,9 @@
   "dependencies": {
     "@types/ini": "^1.3.30",
     "@types/js-yaml": "^3.12.1",
-    "@types/lodash": "^4.14.149",
     "commander": "^4.0.1",
     "ini": "^1.3.5",
-    "js-yaml": "^3.13.1",
-    "lodash": "^4.17.15"
+    "js-yaml": "^3.13.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
