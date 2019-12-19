@@ -1,6 +1,6 @@
 {
   "name": "gendiff-mazurineg",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Compares two configuration files and shows a difference.",
   "main": "dist/index.js",
   "module": "dist/index.js",
