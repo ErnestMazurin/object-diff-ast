@@ -1,7 +1,7 @@
 {
   "name": "object-diff-ast",
   "version": "0.9.0",
-  "description": "Compares two objects and calculate difference",
+  "description": "Compares two objects and calculates the difference",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
