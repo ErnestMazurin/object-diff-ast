@@ -16,7 +16,7 @@ const cli = (command: string, cwd: string) =>
   });
 
 test('cli integration test', () => {
-  const script = 'src/bin/gendiff.ts';
+  const script = 'src/bin/getdiff.ts';
   const before = '__tests__/__fixtures__/before.json';
   const after = '__tests__/__fixtures__/after.json';
   return cli(`npm run ts-node -- ${script} ${before} ${after}`, '.').then(({ stdout }) => {

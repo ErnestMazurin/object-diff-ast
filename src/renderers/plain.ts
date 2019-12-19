@@ -1,6 +1,5 @@
-import { isObject } from 'lodash';
-import { Node } from '../Node';
-import { JSONValue } from '../JSONObject';
+import { isObject } from '../utils';
+import { Node, JSONValue } from '../types';
 
 const toString = (value: JSONValue) => (isObject(value) ? 'complex value' : `'${value}'`);
 
