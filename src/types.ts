@@ -1,9 +1,8 @@
 export type JSONPrimitive = string | number | boolean | null;
 
-export type JSONValue = JSONObject | JSONPrimitive; // | JSONArray;
+export type JSONValue = JSONObject | JSONPrimitive | JSONArray;
 
-// TODO: add array support
-// type JSONArray = JSONValue[];
+export type JSONArray = Array<JSONValue>;
 
 export type JSONObject = { [key: string]: JSONValue };
 
@@ -35,6 +34,7 @@ export interface ChangeNode extends CommonPart {
 
 export interface UnitNode extends CommonPart {
   readonly type: 'unit';
+  readonly unit: 'array' | 'object';
   readonly children: Array<Node>;
 }
 

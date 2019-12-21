@@ -40,55 +40,134 @@ Supported formats: "plain", "json" or "complex" (default)
 
 #### `getDiff`
 Returns list of diff objects (Node) that represents difference of two objects.
-```js
-import { getDiff } from 'object-diff-ast';
-
-const obj1 = {
+```typescript
+import { getDiff, JSONObject, Node } from 'object-diff-ast';
+const before: JSONObject = {
   field1: 'smth',
-   field2: 2,
-   field3: true,
+  field2: 2,
+  field3: true,
+  deep: {
+    field: {
+      k: 'v1',
+    },
+  },
 };
 
-const obj2 = {
+const after: JSONObject = {
   field1: 'smth',
   field2: 3,
   field4: {
     foo: 'bar',
   },
+  deep: {
+    field: {
+      k: 'v2',
+    },
+  },
 };
 
-const diff = getDiff(obj1, obj2);
+const diff: Node[] = getDiff(before, after);
 console.log(diff);
-// Array output >>>
+// output >>>
 /*
 [
   { key: 'field1', level: 1, type: 'unchanged', oldValue: 'smth' },
   { key: 'field2', level: 1, type: 'changed', oldValue: 2, newValue: 3 },
   { key: 'field3', level: 1, type: 'removed', oldValue: true },
+  {
+    key: 'deep',
+    level: 1,
+    type: 'unit',
+    unit: 'object',
+    children: [
+      {
+        key: 'field',
+        level: 2,
+        type: 'unit',
+        unit: 'object',
+        children: [
+          {
+            key: 'k',
+            level: 3,
+            type: 'changed',
+            oldValue: 'v1',
+            newValue: 'v2',
+          },
+        ],
+      },
+    ],
+  },
   { key: 'field4', level: 1, type: 'added', newValue: { foo: 'bar' } },
+]
+*/
+```
+
+Or with arrays as field values
+```typescript
+import { getDiff, JSONObject, Node } from 'object-diff-ast';
+
+const before: JSONObject = {
+  field: ['first', 'second'],
+};
+
+const after: JSONObject = {
+  field: ['first', 'third'],
+  newField: [1, 2, 3],
+};
+const diff: Node[] = getDiff(before, after);
+console.log(diff);
+// output >>>
+/*
+[
+  {
+    key: 'field',
+    level: 1,
+    type: 'unit',
+    unit: 'array',
+    children: [
+      { key: '0', level: 2, type: 'unchanged', oldValue: 'first' },
+      { key: '1', level: 2, type: 'changed', oldValue: 'second', newValue: 'third' },
+    ],
+  },
+  { key: 'newField', level: 1, type: 'added', newValue: [1, 2, 3] },
 ];
 */
 ```
 
 #### `render`
 Renders calculated diff in different formats.
-```js
-import { getDiff, render } from 'object-diff-ast';
-const obj1 = {
+```typescript
+import { getDiff, render, JSONObject } from 'object-diff-ast';
+
+const before: JSONObject = {
   field1: 'smth',
   field2: 2,
   field3: true,
+  deep: {
+    foo: {
+      bar: 'v1',
+    },
+    list: [1, 2],
+  },
 };
-const obj2 = {
+
+const after: JSONObject = {
   field1: 'smth',
   field2: 3,
   field4: {
     foo: 'bar',
   },
+  deep: {
+    foo: {
+      bar: 'v2',
+    },
+    list: [1, 3, 4],
+  },
 };
-const diff = getDiff(obj1, obj2);
 
-const complex = render(diff); // default format = "complex"
+const diff = getDiff(before, after);
+
+const complex: string = render(diff); // default format = "complex"
 console.log(complex);
 // String output >>>
 /*
@@ -97,6 +176,18 @@ console.log(complex);
   + field2: 3
   - field2: 2
   - field3: true
+    deep: {
+        foo: {
+          + bar: v2
+          - bar: v1
+        }
+        list: [
+            0: 1
+          + 1: 3
+          - 1: 2
+          + 2: 4
+        ]
+    }
   + field4: {
         foo: bar
     }
@@ -109,6 +200,9 @@ console.log(plain);
 /*
 Property 'field2' was updated. From '2' to '3'
 Property 'field3' was removed
+Property 'deep.foo.bar' was updated. From 'v1' to 'v2'
+Property 'deep.list.1' was updated. From '2' to '3'
+Property 'deep.list.2' was added with value '4'
 Property 'field4' was added with complex value
 */
 
@@ -137,6 +231,56 @@ console.log(json);
     "oldValue": true
   },
   {
+    "key": "deep",
+    "level": 1,
+    "type": "unit",
+    "unit": "object",
+    "children": [
+      {
+        "key": "foo",
+        "level": 2,
+        "type": "unit",
+        "unit": "object",
+        "children": [
+          {
+            "key": "bar",
+            "level": 3,
+            "type": "changed",
+            "oldValue": "v1",
+            "newValue": "v2"
+          }
+        ]
+      },
+      {
+        "key": "list",
+        "level": 2,
+        "type": "unit",
+        "unit": "array",
+        "children": [
+          {
+            "key": "0",
+            "level": 3,
+            "type": "unchanged",
+            "oldValue": 1
+          },
+          {
+            "key": "1",
+            "level": 3,
+            "type": "changed",
+            "oldValue": 2,
+            "newValue": 3
+          },
+          {
+            "key": "2",
+            "level": 3,
+            "type": "added",
+            "newValue": 4
+          }
+        ]
+      }
+    ]
+  },
+  {
     "key": "field4",
     "level": 1,
     "type": "added",
@@ -149,7 +293,7 @@ console.log(json);
 ```
 
 #### `getConfigDiff`
-Returns diff of two configuration files as formatted string. (only Nodejs environment)
+Wrapper over the `render` function. Returns diff of two configuration files as formatted string. (only Nodejs environment)
 Support json, ini and yaml file extensions.
 ```js
 import { getConfigDiff } from 'object-diff-ast';

@@ -2,6 +2,7 @@ import { complexRender } from './complex';
 import { plainRender } from './plain';
 import { jsonRender } from './json';
 import { Node } from '../types';
+import { has } from '../utils';
 
 const RENDERERS_DISPATCHER = {
   complex: complexRender,
@@ -11,7 +12,7 @@ const RENDERERS_DISPATCHER = {
 
 type Renderer = keyof typeof RENDERERS_DISPATCHER;
 
-const isValidFormat = (format: string): format is Renderer => format in RENDERERS_DISPATCHER;
+const isValidFormat = (format: string): format is Renderer => has(RENDERERS_DISPATCHER, format);
 
 /**
  * Allows you to render ast diff tree

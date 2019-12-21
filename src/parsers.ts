@@ -1,20 +1,16 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 import { JSONObject } from './types';
+import { has } from './utils';
 
-const PARSERS_DISPATCHERS = {
+const PARSERS = {
   json: (str: string) => JSON.parse(str),
   yaml: (str: string) => yaml.safeLoad(str),
   ini: (str: string) => ini.parse(str),
 } as const;
 
-const isValidExtension = (format: string): format is Extension => format in PARSERS_DISPATCHERS;
+export const isValidExtension = (format: string): format is Extension => has(PARSERS, format);
 
-export type Extension = keyof typeof PARSERS_DISPATCHERS;
+export type Extension = keyof typeof PARSERS;
 
-export const parse = (data: string, extension: string): JSONObject => {
-  if (isValidExtension(extension)) {
-    return PARSERS_DISPATCHERS[extension](data);
-  }
-  throw new Error('Unsupported extension');
-};
+export const parse = (data: string, extension: Extension): JSONObject => PARSERS[extension](data);

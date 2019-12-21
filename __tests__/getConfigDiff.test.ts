@@ -7,24 +7,11 @@ const read = (path?: string) => fs.readFileSync(getPath(path)).toString();
 
 describe('genDiff', () => {
   it.each([
-    ['before.json', 'after.json', 'expected.complex', undefined],
-    ['before.yaml', 'after.yaml', 'expected.complex', undefined],
-    ['before.ini', 'after.ini', 'expected.complex', undefined],
-
-    ['before.json', 'after.json', 'expected.complex', 'complex'],
-    ['before.yaml', 'after.yaml', 'expected.complex', 'complex'],
-    ['before.ini', 'after.ini', 'expected.complex', 'complex'],
-
-    ['before.json', 'after.json', 'expected.plain', 'plain'],
-    ['before.yaml', 'after.yaml', 'expected.plain', 'plain'],
-    ['before.ini', 'after.ini', 'expected.plain', 'plain'],
-
     ['before.json', 'after.json', 'expected.json', 'json'],
     ['before.yaml', 'after.yaml', 'expected.json', 'json'],
     ['before.ini', 'after.ini', 'expected.json', 'json'],
   ])('genDiff(%s, %s, %s)', (name1, name2, expectedName, format) => {
     const expected = read(expectedName);
-    console.log(format);
     expect(getConfigDiff(getPath(name1), getPath(name2), format)).toBe(expected);
   });
 
