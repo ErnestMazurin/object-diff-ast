@@ -1,5 +1,5 @@
 import { union, keys, has, isObject, isArray, toObject } from './utils';
-import { JSONObject, Node } from './types';
+import { JSONObject, JSONArray, Node } from './types';
 
 const iter = (obj1: JSONObject, obj2: JSONObject, level: number): Node[] =>
   union(keys(obj1), keys(obj2)).map(key => {
@@ -26,4 +26,8 @@ const iter = (obj1: JSONObject, obj2: JSONObject, level: number): Node[] =>
 /**
  * Calculates diff tree object
  */
-export const getDiff = (obj1: JSONObject, obj2: JSONObject) => iter(obj1, obj2, 1);
+export const getDiff = (before: JSONObject | JSONArray, after: JSONObject | JSONArray) => {
+  const obj1 = isArray(before) ? toObject(before) : before;
+  const obj2 = isArray(after) ? toObject(after) : after;
+  return iter(obj1, obj2, 1);
+};
