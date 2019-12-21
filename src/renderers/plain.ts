@@ -1,11 +1,11 @@
-import { isObject } from '../utils';
+import { isPrimitive } from '../utils';
 import { Node, JSONValue } from '../types';
 
-const toString = (value: JSONValue) => (isObject(value) ? 'complex value' : `'${value}'`);
+const toString = (value: JSONValue) => (!isPrimitive(value) ? 'complex value' : `'${value}'`);
 
 const makeText = (node: Node, parentKey: string): string => {
   if (node.type === 'added') {
-    const title = isObject(node.newValue) ? '' : 'value ';
+    const title = !isPrimitive(node.newValue) ? '' : 'value ';
     const newValue = toString(node.newValue);
     return `Property '${parentKey}${node.key}' was added with ${title}${newValue}`;
   }

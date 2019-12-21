@@ -1,54 +1,62 @@
-import { isObject, keys } from '../utils';
+import { isArray, isPrimitive, isObject, toObject, keys } from '../utils';
 import { Node, JSONValue } from '../types';
 
 const basicGap = '  ';
 
+const BRACKETS = {
+  array: { open: '[', close: ']' },
+  object: { open: '{', close: '}' },
+};
+
 const toString = (key: string, value: JSONValue, gap: string, prefix: string): string => {
-  if (!isObject(value)) {
+  if (isArray(value) && value.length === 0) {
+    return `${gap}${prefix} ${key}: []\n`;
+  }
+  if (isObject(value) && keys(value).length === 0) {
+    return `${gap}${prefix} ${key}: {}\n`;
+  }
+  if (isPrimitive(value)) {
     return `${gap}${prefix} ${key}: ${value}\n`;
   }
+  const obj = isArray(value) ? toObject(value) : value;
 
-  const head = `${gap}${prefix} ${key}: {\n`;
-  const tail = `${gap}${basicGap}}\n`;
-  const body = keys(value)
+  const bracket = BRACKETS[isArray(value) ? 'array' : 'object'];
+
+  const head = `${gap}${prefix} ${key}: ${bracket.open}\n`;
+  const body = keys(obj)
     .map(innerKey => {
-      const innerValue = value[innerKey];
+      const innerValue = obj[innerKey];
       const innerGap = `${gap}${basicGap.repeat(2)}`;
-      if (isObject(innerValue)) {
-        return toString(innerKey, innerValue, innerGap, basicGap);
-      }
-      return `${innerGap}${basicGap}${innerKey}: ${innerValue}\n`;
+      return toString(innerKey, innerValue, innerGap, ' ');
     })
     .join('');
+  const tail = `${gap}${basicGap}${bracket.close}\n`;
 
   return `${head}${body}${tail}`;
 };
 
 const makeText = (node: Node): string => {
   const gap = basicGap.repeat(node.level * 2 - 1);
-
   if (node.type === 'added') {
     return `${toString(node.key, node.newValue, gap, '+')}`;
   }
-
   if (node.type === 'removed') {
     return `${toString(node.key, node.oldValue, gap, '-')}`;
   }
-
   if (node.type === 'changed') {
     const { oldValue, newValue } = node;
-    const str1 = toString(node.key, oldValue, gap, '-');
-    const str2 = toString(node.key, newValue, gap, '+');
-    return isObject(oldValue) || isObject(newValue) ? `${str1}${str2}` : `${str2}${str1}`;
+    const oldV = toString(node.key, oldValue, gap, '-');
+    const newV = toString(node.key, newValue, gap, '+');
+    return `${newV}${oldV}`;
   }
-
   if (node.type === 'unchanged') {
     return `${toString(node.key, node.oldValue, gap, ' ')}`;
   }
 
-  const head = `${gap}${basicGap}${node.key}: {\n`;
+  const bracket = BRACKETS[node.unit];
+  const head = `${gap}${basicGap}${node.key}: ${bracket.open}\n`;
   const body = node.children.map(makeText).join('');
-  const tail = `${gap}${basicGap}}\n`;
+  const tail = `${gap}${basicGap}${bracket.close}\n`;
   return `${head}${body}${tail}`;
 };
 

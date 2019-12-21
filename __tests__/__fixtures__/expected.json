@@ -1,118 +1,72 @@
 [
   {
-    "key": "common",
+    "key": "unchd",
+    "level": 1,
+    "type": "unchanged",
+    "oldValue": "val1"
+  },
+  {
+    "key": "chd",
+    "level": 1,
+    "type": "changed",
+    "oldValue": "3",
+    "newValue": "10"
+  },
+  {
+    "key": "rm",
+    "level": 1,
+    "type": "removed",
+    "oldValue": "rem"
+  },
+  {
+    "key": "obj",
     "level": 1,
     "type": "unit",
+    "unit": "object",
     "children": [
       {
-        "key": "setting1",
-        "level": 2,
-        "type": "unchanged",
-        "oldValue": "Value 1"
-      },
-      {
-        "key": "setting2",
-        "level": 2,
-        "type": "removed",
-        "oldValue": "200"
-      },
-      {
-        "key": "setting3",
+        "key": "key",
         "level": 2,
         "type": "changed",
-        "oldValue": true,
-        "newValue": {
-          "key": "value"
-        }
+        "oldValue": "value",
+        "newValue": "value2"
       },
       {
-        "key": "setting6",
+        "key": "chdArr",
         "level": 2,
         "type": "unit",
+        "unit": "array",
         "children": [
           {
-            "key": "key",
+            "key": "0",
             "level": 3,
             "type": "unchanged",
-            "oldValue": "value"
+            "oldValue": "first"
           },
           {
-            "key": "ops",
+            "key": "1",
             "level": 3,
-            "type": "added",
-            "newValue": "vops"
+            "type": "changed",
+            "oldValue": "second",
+            "newValue": "third2"
+          },
+          {
+            "key": "2",
+            "level": 3,
+            "type": "changed",
+            "oldValue": "third",
+            "newValue": "foo"
           }
         ]
       },
       {
-        "key": "setting4",
-        "level": 2,
-        "type": "added",
-        "newValue": "blah blah"
-      },
-      {
-        "key": "setting5",
+        "key": "obj",
         "level": 2,
         "type": "added",
         "newValue": {
-          "key5": "value5"
-        }
-      },
-      {
-        "key": "setting7",
-        "level": 2,
-        "type": "added",
-        "newValue": {
-          "key": {
-            "innerKey": "innerValue"
-          }
+          "inner": "val"
         }
       }
     ]
-  },
-  {
-    "key": "group1",
-    "level": 1,
-    "type": "unit",
-    "children": [
-      {
-        "key": "baz",
-        "level": 2,
-        "type": "changed",
-        "oldValue": "bas",
-        "newValue": "bars"
-      },
-      {
-        "key": "foo",
-        "level": 2,
-        "type": "unchanged",
-        "oldValue": "bar"
-      },
-      {
-        "key": "nest",
-        "level": 2,
-        "type": "changed",
-        "oldValue": {
-          "key": "value"
-        },
-        "newValue": "str"
-      }
-    ]
-  },
-  {
-    "key": "group2",
-    "level": 1,
-    "type": "removed",
-    "oldValue": {
-      "abc": "12345"
-    }
-  },
-  {
-    "key": "group3",
-    "level": 1,
-    "type": "added",
-    "newValue": {
-      "fee": "100500"
-    }
   }
 ]
