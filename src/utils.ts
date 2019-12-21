@@ -25,7 +25,10 @@ export const isArray = (value: JSONValue): value is JSONArray => Array.isArray(v
 export const isPrimitive = (value: JSONValue): value is JSONPrimitive => !isArray(value) && !isObject(value);
 
 /** Converts array to object (indexes to string keys)*/
-export const toObject = (list: JSONArray): JSONObject =>
-  list
-    .map((item, i) => ({ key: String(i), value: item }))
-    .reduce((acc, { key, value }) => ({ ...acc, [key]: value }), {});
+export const toObject = (list: JSONArray): JSONObject => {
+  const obj = {} as JSONObject;
+  list.forEach((value, idx) => {
+    obj[String(idx)] = value;
+  });
+  return obj;
+};
