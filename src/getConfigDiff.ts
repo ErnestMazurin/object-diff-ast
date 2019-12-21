@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { render } from './renderers';
-import { parse } from './parsers';
+import { parse, isValidExtension } from './parsers';
 import { getDiff } from './getDiff';
 
 /**
@@ -14,12 +14,14 @@ import { getDiff } from './getDiff';
 export const getConfigDiff = (path1: string, path2: string, format?: string) => {
   const fileContent1 = fs.readFileSync(path1).toString();
   const fileContent2 = fs.readFileSync(path2).toString();
+  const ext1 = path.extname(path1).slice(1);
+  const ext2 = path.extname(path2).slice(1);
+  if (!isValidExtension(ext1) || !isValidExtension(ext2)) {
+    throw new Error('Unsupported extension');
+  }
 
-  const extension1 = path.extname(path1).slice(1);
-  const extension2 = path.extname(path2).slice(1);
-
-  const config1 = parse(fileContent1, extension1);
-  const config2 = parse(fileContent2, extension2);
+  const config1 = parse(fileContent1, ext1);
+  const config2 = parse(fileContent2, ext2);
 
   return render(getDiff(config1, config2), format);
 };
