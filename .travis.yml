@@ -14,7 +14,7 @@ cache:
     - node_modules
 
 install:
-  - make install
+  - yarn
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -22,9 +22,9 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - make lint
-  - make build
-  - make test
+  - yarn lint
+  - yarn build
+  - yarn test
 
 after_script:
   - ./cc-test-reporter after-build -t lcov --debug --exit-code $TRAVIS_TEST_RESULT

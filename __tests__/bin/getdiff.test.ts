@@ -16,10 +16,9 @@ const cli = (command: string, cwd: string) =>
   });
 
 test('cli app test', () => {
-  const script = 'src/bin/getdiff.ts';
   const before = '__tests__/__fixtures__/before.json';
   const after = '__tests__/__fixtures__/after.json';
-  return cli(`npm run ts-node -- ${script} ${before} ${after} -f plain`, '.').then(({ stdout }) => {
+  return cli(`yarn start ${before} ${after} -f plain`, '.').then(({ stdout }) => {
     const total = stdout.match(/Property/g);
     expect(total).toHaveLength(6);
 

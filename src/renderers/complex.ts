@@ -24,7 +24,7 @@ const toString = (key: string, value: JSONValue, gap: string, prefix: string): s
 
   const head = `${gap}${prefix} ${key}: ${bracket.open}\n`;
   const body = keys(obj)
-    .map(innerKey => {
+    .map((innerKey) => {
       const innerValue = obj[innerKey];
       const innerGap = `${gap}${basicGap.repeat(2)}`;
       return toString(innerKey, innerValue, innerGap, ' ');
@@ -60,4 +60,4 @@ const makeText = (node: Node): string => {
   return `${head}${body}${tail}`;
 };
 
-export const complexRender = (ast: Node[]) => `{\n${ast.map(makeText).join('')}}\n`;
+export const complexRender = (ast: Node[]): string => `{\n${ast.map(makeText).join('')}}\n`;

@@ -21,13 +21,13 @@ const makeText = (node: Node, parentKey: string): string => {
     return '';
   }
   return node.children
-    .map(item => makeText(item, `${parentKey}${node.key}.`))
-    .filter(x => x !== '')
+    .map((item) => makeText(item, `${parentKey}${node.key}.`))
+    .filter((x) => x !== '')
     .join('\n');
 };
 
-export const plainRender = (ast: Node[]) =>
+export const plainRender = (ast: Node[]): string =>
   `${ast
-    .map(node => makeText(node, ''))
-    .filter(x => x !== '')
+    .map((node) => makeText(node, ''))
+    .filter((x) => x !== '')
     .join('\n')}\n`;

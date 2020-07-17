@@ -1,12 +1,12 @@
 import { JSONObject, JSONArray, JSONValue, JSONPrimitive } from './types';
 
-export const keys = <T extends {}>(obj: T) => Object.keys(obj);
+export const keys = <T extends Record<string, unknown>>(obj: T): string[] => Object.keys(obj);
 
-export const union = <T>(arr1: T[], arr2: T[]) => {
+export const union = <T>(arr1: T[], arr2: T[]): T[] => {
   const arr = arr1.concat(arr2);
   const set = new Set<T>();
   const result = new Array<T>();
-  arr.forEach(value => {
+  arr.forEach((value) => {
     if (!set.has(value)) {
       set.add(value);
       result.push(value);
@@ -15,7 +15,8 @@ export const union = <T>(arr1: T[], arr2: T[]) => {
   return result;
 };
 
-export const has = <T extends {}>(obj: T, property: string) => obj.hasOwnProperty(property);
+export const has = <T extends Record<string, unknown>>(obj: T, property: string): boolean =>
+  obj.hasOwnProperty(property);
 
 export const isObject = (value: JSONValue): value is JSONObject =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
