@@ -15,7 +15,7 @@
     "build": "tsc",
     "test": "jest",
     "start": "ts-node src/bin/getdiff.ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "yarn build"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",
