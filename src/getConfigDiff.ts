@@ -11,7 +11,7 @@ import { getDiff } from './getDiff';
  * @param format - one of "plain", "json" or "complex" (default)
  * @throws Error when file format or extension is unsupported
  */
-export const getConfigDiff = (path1: string, path2: string, format?: string) => {
+export const getConfigDiff = (path1: string, path2: string, format?: string): string => {
   const fileContent1 = fs.readFileSync(path1).toString();
   const fileContent2 = fs.readFileSync(path2).toString();
   const ext1 = path.extname(path1).slice(1);

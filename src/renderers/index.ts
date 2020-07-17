@@ -19,7 +19,7 @@ const isValidFormat = (format: string): format is Renderer => has(RENDERERS_DISP
  * @param ast - diff tree
  * @param format - one of "plain", "json" or "complex" (default)
  */
-export const render = (ast: Node[], format = 'complex') => {
+export const render = (ast: Node[], format = 'complex'): string => {
   if (isValidFormat(format)) {
     return RENDERERS_DISPATCHER[format](ast);
   }
